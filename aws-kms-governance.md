@@ -19,6 +19,8 @@ For example, an organization may implement the following separation of duties co
 2. Key Owners: Individuals responsible for managing keys and granting permissions to other users or roles. For example, a team can be the key owner and assign specific rights to their keys.
 3. Key Users: Individuals or applications that use encryption keys to encrypt or decrypt sensitive data. Key users may have limited access to KMS, restricted only to the keys and operations that they require to perform their specific job functions.
 
+![aws-kms-roles](https://user-images.githubusercontent.com/944576/221542408-e19b56f3-dd83-408c-8918-f73c42fe43aa.png)
+
 In the context of AWS, it is generally not recommended to manage the keys using the AWS root user as it has full access to all resources in the account. 
 Instead, it is recommended to create a separate IAM role to perform key administration. This approach follows the principle of least privilege, which ensures that users and roles are only granted the minimum permissions necessary to perform their tasks.
 AWS key administrators may have full access to KMS API, `kms:*`, which lets them create and manage the encryption keys, but it is recommended not to assign full privileges to any role. For example, the following actions limit an IAM principal to only create keys and update its policy but prevent them from using the key for encryption/decryption.
@@ -131,8 +133,7 @@ To access KMS securely from within your VPC, you can create a VPC endpoint for t
 
 After deploying a VPC Interface Endpoint for KMS in your VPC, you can add a condition to your endpoint resource policy to deny encryption and decryption requests unless the request comes through this endpoint.
 
-![aws-kms-hardening](https://user-images.githubusercontent.com/944576/221534411-09f1c27a-7b8e-454d-ae15-fdbe9ac01b38.png)
-
+![aws-kms-hardening](https://user-images.githubusercontent.com/944576/221542700-5515dd17-97eb-4185-ad2f-191a5681f6e5.png)
 
 To secure a VPC endpoint in AWS, you can implement several measures, including:
 

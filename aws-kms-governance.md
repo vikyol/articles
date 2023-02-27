@@ -167,15 +167,7 @@ SCPs can be used to restrict access to KMS keys based on specific criteria, such
 SCPs can also be used to control who can create and delete KMS keys within an AWS account. By limiting these actions to only authorized users or roles, you can reduce the risk of accidental or malicious deletion of keys.
 
 The following SCP limits key deletions operations to only a single role.
-```
-{
-    "Action": [
-        "kms:ScheduleKeyDeletion",
-        "kms:Delete*"
-    ],
-    "Resource": "*",
-    "Effect": "Deny"
-}
+
 ```
 {
     "Version": "2012-10-17",
@@ -200,3 +192,4 @@ The following SCP limits key deletions operations to only a single role.
         }
     ]
 }
+```

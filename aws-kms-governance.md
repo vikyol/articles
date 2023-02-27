@@ -1,8 +1,8 @@
 ## AWS KMS Governance
 
-The goal of KMS key governance is to ensure that KMS keys are used appropriately and securely to protect sensitive data.
-KMS key governance includes several key components, such as:
-1. Key creation and rotation policies: Establishing policies for creating and rotating KMS keys, such as requirements for key strength and frequency of rotation.
+The goal of KMS key governance is to ensure that KMS keys are used appropriately and securely to protect sensitive data. KMS key governance includes several essential components, such as:
+
+1. Key creation and rotation policies: Establish policies for creating and rotating KMS keys, such as requirements for key strength and frequency of rotation.
 2. Key usage policies: Defining policies for how KMS keys should be used, such as which AWS services are allowed to access the keys, which IAM roles or users can use the keys, and under what circumstances keys should be used.
 3. Key retention and deletion policies: Defining policies for how long KMS keys should be retained, how they should be securely destroyed at the end of their lifecycle, and how to handle any key material backups.
 4. Key management and monitoring: Establishing processes for managing and monitoring KMS keys, such as logging all key usage, conducting periodic audits of key usage, and enforcing key access controls.
@@ -10,20 +10,19 @@ KMS key governance includes several key components, such as:
 
 ### Separation of Duties
 
-Separation of duties is a security principle that involves assigning different roles and responsibilities to different individuals within an organization to prevent conflicts of interest and reduce the risk of fraud, errors, and other security breaches. It is used to ensure that one individual does not have all the necessary permissions to be able to complete a malicious action. 
+Separation of duties is a security principle that involves assigning different roles and responsibilities to different individuals within an organization. This is done to prevent conflicts of interest and reduce the risk of fraud, errors, and other security breaches. It is used to ensure that one individual does not have all the necessary permissions to be able to complete a malicious action.
 
-With regard to KMS, separation of duties involves assigning different roles and responsibilities to different individuals or teams within an organization to prevent unauthorized access to encryption keys and ensure the security of sensitive data.
-For example, an organization may implement the following separation of duties controls for KMS:
+With regard to KMS, separation of duties involves assigning different roles and responsibilities to different individuals or teams within an organization. This is to prevent unauthorized access to encryption keys and ensure the security of sensitive data. For example, an organization may implement the following separation of duties controls for KMS:
 
 1. Key Administrators: Individuals responsible for creating and managing encryption keys. Key administrators may have full access to KMS, including the ability to create and manage keys, and to grant permissions to other users or roles.
+
 2. Key Owners: Individuals responsible for managing keys and granting permissions to other users or roles. For example, a team can be the key owner and assign specific rights to their keys.
+
 3. Key Users: Individuals or applications that use encryption keys to encrypt or decrypt sensitive data. Key users may have limited access to KMS, restricted only to the keys and operations that they require to perform their specific job functions.
 
 ![aws-kms-roles](https://user-images.githubusercontent.com/944576/221543742-8c703b5b-410d-4e15-94e5-c1e5da3dd5d8.png)
 
-In the context of AWS, it is generally not recommended to manage the keys using the AWS root user as it has full access to all resources in the account. 
-Instead, it is recommended to create a separate IAM role to perform key administration. This approach follows the principle of least privilege, which ensures that users and roles are only granted the minimum permissions necessary to perform their tasks.
-AWS key administrators may have full access to KMS API, `kms:*`, which lets them create and manage the encryption keys, but it is recommended not to assign full privileges to any role. For example, the following actions limit an IAM principal to only create keys and update its policy but prevent them from using the key for encryption/decryption.
+In the context of AWS, it is generally not recommended to manage keys using the AWS root user as it has full access to all resources in the account. Instead, it is advised to create a separate IAM role to perform key administration. This approach follows the principle of least privilege, which ensures that users and roles are only granted the minimum permissions necessary to perform their tasks. AWS key administrators may have full access to the KMS API, kms:*, which lets them c§eate and manage encryption keys, but it is advised not to assign full privileges to any role. For example, the following actions limit an IAM principal to only create keys and update its policy but prevent them from using the key for encryption/decryption.
 
 ```
 "Action": [
@@ -32,23 +31,22 @@ AWS key administrators may have full access to KMS API, `kms:*`, which lets them
 ]
 ```
 
-The key owners should only have permission to update KMS key policies. The key owners' policy should contain the following rights:
+The key owners should only have permission to update KMS policies. The key owners' policy should contain the following rights:
 
-The policy for the key user role should only contain the actions pertaining to cryptographic operations:
+The policy for the key user role should only contain actions pertaining to cryptographic operations:
 ```
 "Action": [
   kms:PutKeyPolicy
 ]
 ```
 
-It is worth mentioning that the above policy action lets key owners elevate their KMS privileges by updating key policies. It is therefore important to protect the critical keys using service control policies at the AWS organization level.
+It is worth mentioning that the above policy action lets key owners elevate their KMS privileges by updating key policies. It is therefore imperative to protect critical keys using service control policies at the AWS organization level.
 
 ### KMS Key Policy
-A KMS key policy is attached to a specific KMS key and controls access to that key, regardless of the user or application attempting to access it. The policy specifies the permissions that are granted to IAM users, roles, and AWS services, as well as to external principals that are identified by their AWS account IDs or public keys.
-It is usually better to provide permissions in key policies that affect one KMS key, rather than in an IAM policy that can apply to many KMS keys.
+A KMS key policy is attached to a specific KMS key and controls access to that key, regardless of the user or application attempting to access it. The policy specifies the permissions that are granted to IAM users, roles, and AWS services. In addition, it also grants permissions to external entities identified by their AWS account IDs or public keys. It is usually better to provide permissions in key policies that affect one KMS key, rather than in an IAM policy that can apply to many KMS keys.
 
-Every customer master key (CMK) must have exactly one key policy. The statements in the key policy document determine who has permission to use the CMK and how they can use it. This default key policy gives the AWS account (root user) that owns the CMK full access and enables assigning permissions using IAM policies. However, it is possible to
-disable IAM policies but keep root user access by using the following policy condition:
+Every customer master key (CMK) must have exactly one key policy. The statements in the key policy document determine who has permission to access the CMK and how they can use it. This default key policy gives the AWS account (root user) that owns the CMK full access and enables assigning permissions utilizing IAM policies. However, it is possible to disable IAM policies but keep root user access by using the following policy condition:
+
 ```
 "Condition": {
     "StringEquals": {
@@ -56,9 +54,11 @@ disable IAM policies but keep root user access by using the following policy con
     }
 }
 ```
+
 This condition makes it possible to centralize key permission management within KMS key policies.
 
 The sample policy below contains three policy statements:
+
 1. Set the root user's rights and add a condition to disable IAM policies.
 2. Set key administrators' rights.
 3. Set key users' rights.
@@ -160,11 +160,11 @@ The following key policy statement allows this key to be used for encryption and
 ```
 
 ### VPC Endpoint Policy
-VPC endpoint policies are resource policies that are specific to VPC endpoints. They allow you to control which VPCs and subnets can access the VPC endpoint and which AWS services the endpoint can access. VPC endpoint policies are used to grant permissions to resources that are accessed through the VPC endpoint and are managed independently of IAM policies.
+VPC endpoint policies are resource policies that are specific to VPC endpoints. They allow you to control which VPCs and subnets can access the VPC endpoint and which AWS services the endpoint can reach. VPC endpoint policies are used to grant permissions to resources that are accessed through the VPC endpoint and are managed independently of IAM policies.
 
-By attaching a VPC endpoint policy, it is possible to limit the allowed API operations that the applications can invoke through a VPC endpoint.
+By attaching a VPC endpoint policy, it is possible to limit the allowed API operations that applications can invoke through VPC endpoints.
 
-e.g. The following policy only allows encrypt and decrypt operations on the key specified by the resource ID.
+E.g. The following policy only allows encrypt and decrypt operations on the key specified by the resource ID.
 ```
 {
    "Statement":[
@@ -187,12 +187,11 @@ In the diagram above, the VPC endpoint is protected by a security group, which o
 
 ### Service Control Policies
 Service Control Policies (SCPs) are a powerful security mechanism that can be used to restrict access to AWS services and resources, including KMS keys, at the AWS Organization level.
-Adding this policy statement to a Service Control Policy prevents users or roles in any affected account from deleting KMS keys.
 
 SCPs can be used to restrict access to KMS keys based on specific criteria, such as the IAM user or role attempting to access the key or the AWS service being used. 
 SCPs can also be used to control who can create and delete KMS keys within an AWS account. By limiting these actions to only authorized users or roles, you can reduce the risk of accidental or malicious deletion of keys.
 
-The following SCP limits key deletions operations to only a single role.
+The following SCP limits key deletions to only a single role.
 
 ```
 {

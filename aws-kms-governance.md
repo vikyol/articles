@@ -19,7 +19,7 @@ For example, an organization may implement the following separation of duties co
 2. Key Owners: Individuals responsible for managing keys and granting permissions to other users or roles. For example, a team can be the key owner and assign specific rights to their keys.
 3. Key Users: Individuals or applications that use encryption keys to encrypt or decrypt sensitive data. Key users may have limited access to KMS, restricted only to the keys and operations that they require to perform their specific job functions.
 
-![aws-kms-roles](https://user-images.githubusercontent.com/944576/221542408-e19b56f3-dd83-408c-8918-f73c42fe43aa.png)
+![aws-kms-roles](https://user-images.githubusercontent.com/944576/221543742-8c703b5b-410d-4e15-94e5-c1e5da3dd5d8.png)
 
 In the context of AWS, it is generally not recommended to manage the keys using the AWS root user as it has full access to all resources in the account. 
 Instead, it is recommended to create a separate IAM role to perform key administration. This approach follows the principle of least privilege, which ensures that users and roles are only granted the minimum permissions necessary to perform their tasks.

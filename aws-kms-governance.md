@@ -56,7 +56,7 @@ disable IAM policies but keep root user access by using the following policy con
 ```
 This condition makes it possible to centralize key permission management within KMS key policies.
 
-The sample policy below contains four policy statements:
+The sample policy below contains three policy statements:
 1. Set the root user's rights and add a condition to disable IAM policies.
 2. Set key administrators' rights.
 3. Set key users' rights.
@@ -67,7 +67,7 @@ The sample policy below contains four policy statements:
     "Id": "Key-policy",
     "Statement": [
         {
-            "Sid": "Account root user has full access",
+            "Sid": "Account root user has full access and IAM policies disabled",
             "Effect": "Allow",
             "Principal": {
                 "AWS": "arn:aws:iam::123456789012:root"
@@ -131,13 +131,13 @@ To access KMS securely from within your VPC, you can create a VPC endpoint for t
 
 After deploying a VPC Interface Endpoint for KMS in your VPC, you can add a condition to your endpoint resource policy to deny encryption and decryption requests unless the request comes through this endpoint.
 
-![KMS](https://user-images.githubusercontent.com/64001771/124476166-cedd9280-dda2-11eb-873b-f4ec20ec7983.png)
+![aws-kms-hardening](https://user-images.githubusercontent.com/944576/221534411-09f1c27a-7b8e-454d-ae15-fdbe9ac01b38.png)
+
 
 To secure a VPC endpoint in AWS, you can implement several measures, including:
 
 - To control access to the VPC endpoint, you can use VPC security groups to allow or deny inbound and outbound traffic to the endpoint based on IP addresses, protocols, and ports. You can also specify which instances or subnets can access the endpoint by associating the security group with the VPC endpoint.
 - You can create IAM policies to control which AWS accounts and roles have access to your VPC endpoints. IAM policies enable you to specify who can perform actions on the VPC endpoint and which actions they can perform.
-
 
 ### VPC Endpoint Policy
 VPC endpoint policies are resource policies that are specific to VPC endpoints. They allow you to control which VPCs and subnets can access the VPC endpoint and which AWS services the endpoint can access. VPC endpoint policies are used to grant permissions to resources that are accessed through the VPC endpoint and are managed independently of IAM policies.
@@ -161,6 +161,9 @@ e.g. The following policy only allows encrypt and decrypt operations on the key 
    ]
 }
 ```
+
+In the diagram above, the VPC endpoint is protected by a security group, which only allows traffic from the Kubernetes nodes. As the key policy denies encryption and decryption requests that don't originate from the VPC endpoint, it is safe to say that only the applications running on the nodes can use this key for encrypting and decrypting data.
+
 
 ### Service Control Policies
 Service Control Policies (SCPs) are a powerful security mechanism that can be used to restrict access to AWS services and resources, including KMS keys, at the AWS Organization level.

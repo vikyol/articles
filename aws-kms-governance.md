@@ -131,14 +131,33 @@ The sample policy below contains three policy statements:
 
 To access KMS securely from within your VPC, you can create a VPC endpoint for the KMS service using AWS PrivateLink. This eliminates the need for public internet connectivity to KMS and ensures that all traffic between your VPC and KMS stays within the AWS network.
 
-After deploying a VPC Interface Endpoint for KMS in your VPC, you can add a condition to your endpoint resource policy to deny encryption and decryption requests unless the request comes through this endpoint.
 
 ![aws-kms-hardening](https://user-images.githubusercontent.com/944576/221542700-5515dd17-97eb-4185-ad2f-191a5681f6e5.png)
 
 To secure a VPC endpoint in AWS, you can implement several measures, including:
 
+- Use key policies to deny access to the KMS API using policy conditions. You can add a condition to your KMS key policy to deny encryption and decryption requests unless the request comes from the specified endpoint.
 - To control access to the VPC endpoint, you can use VPC security groups to allow or deny inbound and outbound traffic to the endpoint based on IP addresses, protocols, and ports. You can also specify which instances or subnets can access the endpoint by associating the security group with the VPC endpoint.
 - You can create IAM policies to control which AWS accounts and roles have access to your VPC endpoints. IAM policies enable you to specify who can perform actions on the VPC endpoint and which actions they can perform.
+
+The following key policy statement allows this key to be used for encryption and decryption only if the request comes from the specified VPC endpoint.
+
+```
+{
+  "Sid": "DenyIfRequestNotUsingVpcEndpoint" 
+  "Effect": "Deny",
+  "Principal": "*",
+  "Action": [
+      "kms:Encrypt",
+      "kms:Decrypt"
+  ],
+  "Condition": {
+      "StringNotEquals": {
+          "aws:sourceVpce": "vpce-1234abcdf5678c90a"
+       }
+  }
+}
+```
 
 ### VPC Endpoint Policy
 VPC endpoint policies are resource policies that are specific to VPC endpoints. They allow you to control which VPCs and subnets can access the VPC endpoint and which AWS services the endpoint can access. VPC endpoint policies are used to grant permissions to resources that are accessed through the VPC endpoint and are managed independently of IAM policies.

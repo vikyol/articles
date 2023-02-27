@@ -127,7 +127,7 @@ The sample policy below contains three policy statements:
 }
 ```
 
-## Hardening KMS API Access:
+## Hardening KMS API Access
 
 To access KMS securely from within your VPC, you can create a VPC endpoint for the KMS service using AWS PrivateLink. This eliminates the need for public internet connectivity to KMS and ensures that all traffic between your VPC and KMS stays within the AWS network.
 

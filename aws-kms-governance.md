@@ -136,11 +136,10 @@ To access KMS securely from within your VPC, you can create a VPC endpoint for t
 
 To secure a VPC endpoint in AWS, you can implement several measures, including:
 
-- Use key policies to deny access to the KMS API using policy conditions. You can add a condition to your KMS key policy to deny encryption and decryption requests unless the request comes from the specified endpoint.
 - To control access to the VPC endpoint, you can use VPC security groups to allow or deny inbound and outbound traffic to the endpoint based on IP addresses, protocols, and ports. You can also specify which instances or subnets can access the endpoint by associating the security group with the VPC endpoint.
 - You can create IAM policies to control which AWS accounts and roles have access to your VPC endpoints. IAM policies enable you to specify who can perform actions on the VPC endpoint and which actions they can perform.
 
-The following key policy statement allows this key to be used for encryption and decryption only if the request comes from the specified VPC endpoint.
+It is also possible to restrict access to the KMS API using policy conditions. You can add a condition to your KMS key policy to deny encryption and decryption requests unless the request comes from the specified endpoint. The following example demonstrates this functionality:
 
 ```
 {

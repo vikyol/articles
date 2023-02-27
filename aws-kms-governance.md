@@ -1,4 +1,4 @@
-## AWS KMS Governance in Multi-Account Environments
+## AWS KMS Governance
 
 The goal of KMS key governance is to ensure that KMS keys are used appropriately and securely to protect sensitive data.
 KMS key governance includes several key components, such as:

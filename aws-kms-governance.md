@@ -51,7 +51,7 @@ disable IAM policies but keep root user access by using the following policy con
     }
 }
 ```
-By adding this condition, it becomes possible to centralize key permission management in key policies.
+This condition makes it possible to centralize key permission management within KMS key policies.
 
 The sample policy below contains four policy statements:
 1. Set the root user's rights and add a condition to disable IAM policies.

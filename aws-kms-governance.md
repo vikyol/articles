@@ -163,7 +163,7 @@ VPC endpoint policies are resource policies that are specific to VPC endpoints. 
 
 By attaching a VPC endpoint policy, it is possible to limit the allowed API operations that applications can invoke through VPC endpoints.
 
-E.g. The following policy only allows encrypt and decrypt operations on the key specified by the resource ID.
+E.g. The following policy allows only encrypt and decrypt operations on the key specified by the resource ID.
 ```
 {
    "Statement":[
@@ -181,7 +181,7 @@ E.g. The following policy only allows encrypt and decrypt operations on the key 
 }
 ```
 
-In the diagram above, the VPC endpoint is protected by a security group, which only allows traffic from the Kubernetes nodes. As the key policy denies encryption and decryption requests that don't originate from the VPC endpoint, it is safe to say that only the applications running on the nodes can use this key for encrypting and decrypting data.
+In the diagram above, the VPC endpoint is protected by a security group, which allows traffic only from the Kubernetes nodes. As the key policy denies encryption and decryption requests that don't originate from the VPC endpoint, it is safe to say that only the applications running on the nodes can use this key for encrypting and decrypting data.
 
 
 ### Service Control Policies
